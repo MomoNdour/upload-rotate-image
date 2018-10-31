@@ -1,0 +1,46 @@
+function upload_image()
+{
+        if(isset($_POST) && !empty($_POST))
+        {
+            if(isset($_POST['name']))
+            {
+                $name = $_POST['name'];
+                    if(is_dir("image/".$name))
+                    {     
+                    mkdir("image/".$name, 0700);
+            }
+        }
+        if(isset($_POST['tile'])){
+            $titre = $_POST['tile'];
+        }
+
+
+        // maximum execution time in seconds        
+        set_time_limit ( 24 * 60 * 60 ) ;
+        if (!isset($_POST['submit'])) die() ;
+        $destination_folder = 'image/';
+        $url = $_POST['url'] ;
+        $newfname = $destination_folder . basename ( $url ) ;
+        $names = basename($newfname).PHP_EOL;
+        $file = fopen ( $url , "rb" ) ;
+        if($file ){
+            $newf = fopen ( $newfname , "wb" ) ;
+        }
+        if ( $newf ){
+            while ( ! feof ( $file ) ){
+                fwrite ( $newf , fread ( $file , 1024 * 8 ) , 1024 * 8 ) ;
+            }
+        }
+
+        if($file)
+        {
+            fclose ( $file ) ;
+        }
+        if($newf)
+        {
+            fclose ( $newf ) ;
+        }
+
+        rename("image/$name","image/$name/$titre.jpg");
+    }
+}
